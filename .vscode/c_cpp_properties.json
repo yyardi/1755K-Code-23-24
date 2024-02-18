@@ -1,0 +1,30 @@
+{
+  "configurations": [
+    {
+      "name": "PROS Project",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "c:\\Users\\sayar\\Downloads\\EZ-Template-Example-Project-v3.0.0\\include",
+        "c:\\Users\\sayar\\Documents\\vexcode-projects\\CloseAuton PURDUE\\include"
+      ],
+      "defines": [
+        "_DEBUG",
+        "UNICODE",
+        "_UNICODE"
+      ],
+      "compilerPath": "c:\\Users\\sayar\\AppData\\Roaming\\Code\\User\\globalStorage\\sigbots.pros\\install\\pros-toolchain-windows\\usr\\bin\\arm-none-eabi-g++",
+      "cStandard": "gnu11",
+      "cppStandard": "gnu++20",
+      "intelliSenseMode": "gcc-arm",
+      "compileCommands": "c:\\Users\\sayar\\Documents\\vexcode-projects\\CloseAuton PURDUE\\compile_commands.json",
+      "browse": {
+        "path": [
+          "c:\\Users\\sayar\\Documents\\vexcode-projects\\CloseAuton PURDUE"
+        ],
+        "limitSymbolsToIncludedHeaders": true,
+        "databaseFilename": ""
+      }
+    }
+  ],
+  "version": 4
+}
