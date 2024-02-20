@@ -161,7 +161,7 @@ void opcontrol() {
       chassis.pid_tuner_iterate(); // Allow PID Tuner to iterate
     } 
     if (master.get_digital(DIGITAL_R1)) {
-      intake.move_velocity(100);
+      intake.move_velocity(200);
     }
     chassis.opcontrol_arcade_standard(ez::SPLIT); // Tank control
     // chassis.opcontrol_arcade_standard(ez::SPLIT); // Standard split arcade
