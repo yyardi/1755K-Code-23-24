@@ -140,7 +140,7 @@ void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
   pros::Motor cata (8, MOTOR_GEARSET_36);
-  
+  pros::Motor intake (7, MOTOR_GEARSET_18);
 
   while (true) {
     
@@ -160,7 +160,9 @@ void opcontrol() {
 
       chassis.pid_tuner_iterate(); // Allow PID Tuner to iterate
     } 
-
+    if (master.get_digital(DIGITAL_R1)) {
+      intake.move_velocity(100);
+    }
     chassis.opcontrol_arcade_standard(ez::SPLIT); // Tank control
     // chassis.opcontrol_arcade_standard(ez::SPLIT); // Standard split arcade
     // chassis.opcontrol_arcade_standard(ez::SINGLE); // Standard single arcade
