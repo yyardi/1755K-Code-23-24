@@ -10,11 +10,11 @@
 ez::Drive chassis (
   // Left Chassis Ports (negative port will reverse it!)
   //   the first port is used as the sensor
-  {1, 2, 3}
+  {-9, -20, -18}
 
   // Right Chassis Ports (negative port will reverse it!)
   //   the first port is used as the sensor
-  ,{-4, -5, -6}
+  ,{6, 14, 12}
 
   // IMU Port
   ,7
@@ -23,7 +23,7 @@ ez::Drive chassis (
   ,3.25
 
   // Cartridge RPM
-  ,360
+  ,600
 
   // External Gear Ratio (MUST BE DECIMAL) This is WHEEL GEAR / MOTOR GEAR
   // eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 84/36 which is 2.333
