@@ -58,12 +58,10 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+    Auton("CLOSE SIDE AUTON. FACE TOWARDS POLE.", farSideAuton),
     Auton("Example Drive\n\nDrive forward and come back.", drive_example),
     Auton("Example Turn\n\nTurn 3 times.", turn_example),
-    Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
-    Auton("Drive and Turn\n\nSlow down during drive.", wait_until_change_speed),
     Auton("Swing Example\n\nSwing in an 'S' curve", swing_example),
-    Auton("Combine all 3 movements", combining_movements),
     Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
   });
 
@@ -135,6 +133,11 @@ int CATA_PORT = 8;
 int INTAKE_PORT = 7;
 
 
+pros::Motor cata (CATA_PORT, MOTOR_GEARSET_36);
+pros::Motor intake (INTAKE_PORT, MOTOR_GEARSET_18);
+pros::ADIDigitalOut wings (DIGITAL_SENSOR_PORT_WINGS);
+pros::ADIDigitalOut fourBar (DIGITAL_SENSOR_PORT_FBAR);
+
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -151,10 +154,7 @@ int INTAKE_PORT = 7;
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  pros::Motor cata (CATA_PORT, MOTOR_GEARSET_36);
-  pros::Motor intake (INTAKE_PORT, MOTOR_GEARSET_18);
-  pros::ADIDigitalOut wings (DIGITAL_SENSOR_PORT_WINGS);
-  pros::ADIDigitalOut fourBar (DIGITAL_SENSOR_PORT_FBAR);
+  
   
   while (true) {
     

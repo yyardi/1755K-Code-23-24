@@ -10,6 +10,18 @@ const int DRIVE_SPEED = 110;
 const int TURN_SPEED = 90;
 const int SWING_SPEED = 90;
 
+//Initialize Ports
+char DIGITAL_SENSOR_PORT_WINGS = 'A';
+char DIGITAL_SENSOR_PORT_FBAR = 'B';
+int CATA_PORT = 8;
+int INTAKE_PORT = 7;
+
+
+pros::Motor cata (CATA_PORT, MOTOR_GEARSET_36);
+pros::Motor intake (INTAKE_PORT, MOTOR_GEARSET_18);
+pros::ADIDigitalOut wings (DIGITAL_SENSOR_PORT_WINGS);
+pros::ADIDigitalOut fourBar (DIGITAL_SENSOR_PORT_FBAR);
+
 ///
 // Constants
 ///
@@ -63,53 +75,8 @@ void turn_example() {
   chassis.pid_wait();
 }
 
-///
-// Combining Turn + Drive
-///
-void drive_and_turn() {
-  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
 
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
 
-  chassis.pid_turn_set(-45_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(-24_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-}
-
-///
-// Wait Until and Changing Max Speed
-///
-void wait_until_change_speed() {
-  // pid_wait_until will wait until the robot gets to a desired position
-
-  // When the robot gets to 6 inches, the robot will travel the remaining distance at a max speed of 30
-  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
-  chassis.pid_wait_until(6_in);
-  chassis.pid_speed_max_set(30);  // After driving 6 inches at DRIVE_SPEED, the robot will go the remaining distance at 30 speed
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(-45_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  // When the robot gets to -6 inches, the robot will travel the remaining distance at a max speed of 30
-  chassis.pid_drive_set(-24_in, DRIVE_SPEED, true);
-  chassis.pid_wait_until(-6_in);
-  chassis.pid_speed_max_set(30);  // After driving 6 inches at DRIVE_SPEED, the robot will go the remaining distance at 30 speed
-  chassis.pid_wait();
-}
 
 ///
 // Swing Example
@@ -130,26 +97,6 @@ void swing_example() {
   chassis.pid_wait();
 
   chassis.pid_swing_set(ez::LEFT_SWING, 0_deg, SWING_SPEED, 45);
-  chassis.pid_wait();
-}
-
-///
-// Auto that tests everything
-///
-void combining_movements() {
-  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_swing_set(ez::RIGHT_SWING, -45_deg, SWING_SPEED, 45);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(-24_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 }
 
@@ -194,3 +141,71 @@ void interfered_example() {
 // . . .
 // Make your own autonomous functions here!
 // . . .
+void farSideAuton() {
+    //START ROBOT WITH INTAKE FACING TOWARDS OUR COLOR BAR
+    //if we are blue, the red goal is near us (red -> blue goal)
+    //blue start coords: 35.2, 134.6
+    chassis.pid_drive_set(32_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+    intake.move_velocity(200);
+    pros::delay(1000);
+    intake.brake();
+
+    chassis.pid_drive_set(-32_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_turn_set(-140_deg, TURN_SPEED); //INTAKE SHOULD BE FACING THE TRIBALL
+    chassis.pid_wait();
+
+    wings.set_value(true);
+    chassis.pid_drive_set(30_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_turn_set(-37_deg, TURN_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_drive_set(30_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+    //Outtake second triball
+    intake.move_velocity(-200);
+    pros::delay(1500);
+    intake.brake();
+
+    wings.set_value(false);
+    chassis.pid_drive_set(-21_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+    //HERE WE SHOULD TRY TO GET A SWING
+    chassis.pid_turn_set(75_deg, TURN_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_drive_set(55_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    
+    intake.move_velocity(200);
+    pros::delay(1000);
+    intake.brake();
+
+    chassis.pid_turn_set(-90_deg, TURN_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_drive_set(20_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_turn_set(-40_deg, TURN_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_drive_set(20_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+    intake.move_velocity(-200);
+    pros::delay(1500);
+    intake.brake();
+
+    chassis.pid_drive_set(-23_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+}
+
