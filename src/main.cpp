@@ -17,7 +17,7 @@ ez::Drive chassis (
   ,{6, 14, 12}
 
   // IMU Port
-  ,7
+  ,1
 
   // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
   ,3.25
@@ -121,6 +121,18 @@ void autonomous() {
   ez::as::auton_selector.selected_auton_call(); // Calls selected auton from autonomous selector
 }
 
+bool isWingsOut = false;
+bool wingsLatch = false;
+
+bool isFourBarUp = false;
+bool fourBarLatch = false;
+
+
+//Initialize Ports
+char DIGITAL_SENSOR_PORT_WINGS = 'A';
+char DIGITAL_SENSOR_PORT_FBAR = 'B';
+int CATA_PORT = 8;
+int INTAKE_PORT = 7;
 
 
 /**
@@ -139,9 +151,11 @@ void autonomous() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  pros::Motor cata (8, MOTOR_GEARSET_36);
-  pros::Motor intake (7, MOTOR_GEARSET_18);
-
+  pros::Motor cata (CATA_PORT, MOTOR_GEARSET_36);
+  pros::Motor intake (INTAKE_PORT, MOTOR_GEARSET_18);
+  pros::ADIDigitalOut wings (DIGITAL_SENSOR_PORT_WINGS);
+  pros::ADIDigitalOut fourBar (DIGITAL_SENSOR_PORT_FBAR);
+  
   while (true) {
     
     // PID Tuner
@@ -160,9 +174,61 @@ void opcontrol() {
 
       chassis.pid_tuner_iterate(); // Allow PID Tuner to iterate
     } 
+    
+    //Intake
     if (master.get_digital(DIGITAL_R1)) {
-      intake.move_velocity(200);
+      intake.move_velocity(200); // This is 200 because it's a 200rpm motor
     }
+    else if (master.get_digital(DIGITAL_R2)) {
+      intake.move_velocity(-200);
+    }
+    else {
+      intake.move_velocity(0);
+    }
+
+    //Cata
+    if (master.get_digital(DIGITAL_UP)) {
+      cata.move_velocity(100); // This is 100 because it's a 100rpm motor
+    }
+    else {
+      cata.move_velocity(0);
+    }
+
+    //Four Bar
+    if (isFourBarUp) {
+      fourBar.set_value(true);
+    }
+    else {
+      fourBar.set_value(false);
+    }
+    if (master.get_digital(DIGITAL_L2)) {
+      if (!fourBarLatch) {
+        isFourBarUp = !isFourBarUp;
+        fourBarLatch = true;
+      }
+    }
+    else {
+      fourBarLatch = false;
+    }
+
+    //4 Bar
+    if (isWingsOut) {
+      wings.set_value(true);
+    }
+    else {
+      wings.set_value(false);
+    }
+    if (master.get_digital(DIGITAL_L1)) {
+      if (!wingsLatch) {
+        isWingsOut = !isWingsOut;
+        wingsLatch = true;
+      }
+    }
+    else {
+      wingsLatch = false;
+    }
+
+
     chassis.opcontrol_arcade_standard(ez::SPLIT); // Tank control
     // chassis.opcontrol_arcade_standard(ez::SPLIT); // Standard split arcade
     // chassis.opcontrol_arcade_standard(ez::SINGLE); // Standard single arcade
