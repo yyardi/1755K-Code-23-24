@@ -1,3 +1,4 @@
+//autons.cpp
 #include "main.h"
 
 /////
@@ -141,10 +142,10 @@ void interfered_example() {
 // . . .
 // Make your own autonomous functions here!
 // . . .
-void farSideAuton() {
-    //START ROBOT WITH INTAKE FACING TOWARDS OUR COLOR BAR
+void OffensiveAuton() {
+    //START ROBOT WITH INTAKE FACING TOWARDS OUR OWN COLOR BAR
     //if we are blue, the red goal is near us (red -> blue goal)
-    //blue start coords: 35.2, 134.6
+
     chassis.pid_drive_set(32_in, DRIVE_SPEED);
     chassis.pid_wait();
 
@@ -162,7 +163,7 @@ void farSideAuton() {
     chassis.pid_drive_set(30_in, DRIVE_SPEED);
     chassis.pid_wait();
 
-    chassis.pid_turn_set(-37_deg, TURN_SPEED);
+    chassis.pid_turn_set(37_deg, TURN_SPEED);
     chassis.pid_wait();
 
     chassis.pid_drive_set(30_in, DRIVE_SPEED);
@@ -172,6 +173,7 @@ void farSideAuton() {
     intake.move_velocity(-200);
     pros::delay(1500);
     intake.brake();
+
 
     wings.set_value(false);
     chassis.pid_drive_set(-21_in, DRIVE_SPEED);
@@ -188,7 +190,7 @@ void farSideAuton() {
     pros::delay(1000);
     intake.brake();
 
-    chassis.pid_turn_set(-90_deg, TURN_SPEED);
+    chassis.pid_turn_set(-100_deg, TURN_SPEED);
     chassis.pid_wait();
 
     chassis.pid_drive_set(20_in, DRIVE_SPEED);
@@ -209,3 +211,45 @@ void farSideAuton() {
 
 }
 
+void DefensiveAuton() {
+    //face wings towards the descore ball
+    //preload is intaked
+    
+    //first descore
+    chassis.pid_drive_set(16_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    wings.set_value(true);
+    chassis.pid_drive_set(5_in, DRIVE_SPEED);
+
+    //turn intake towards open area
+    chassis.pid_turn_set(40_deg, TURN_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_drive_set(55_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    //Turn intake towards goal
+    chassis.pid_turn_set(120_deg, TURN_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_drive_set(25_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_drive_set(-17_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+    //Look Towards the start
+    chassis.pid_turn_set(-90_deg, TURN_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_drive_set(50_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+    //Towards bar
+    chassis.pid_turn_set(90_deg, TURN_SPEED);
+    chassis.pid_wait();
+
+    chassis.pid_drive_set(36_in, DRIVE_SPEED);
+    chassis.pid_wait();
+
+
+}

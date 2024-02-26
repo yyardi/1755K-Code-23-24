@@ -1,3 +1,4 @@
+//main.cpp
 #include "main.h"
 
 /////
@@ -58,7 +59,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-    Auton("CLOSE SIDE AUTON. FACE TOWARDS POLE.", farSideAuton),
+    Auton("FAR SIDE AUTON. FACE TOWARDS POLE.", OffensiveAuton),
+    Auton("CLOSE SIDE AUTON. ", DefensiveAuton),
     Auton("Example Drive\n\nDrive forward and come back.", drive_example),
     Auton("Example Turn\n\nTurn 3 times.", turn_example),
     Auton("Swing Example\n\nSwing in an 'S' curve", swing_example),
